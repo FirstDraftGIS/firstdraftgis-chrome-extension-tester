@@ -1,3 +1,3 @@
-apt-get install -y xdotool
-pip install behave selenium --upgrade
+apt-get install -y python-opencv tesseract-ocr xdotool
+pip install behave pytesseract selenium --upgrade
 

@@ -1,22 +1,43 @@
 from behave import *
+from breeze import click, is_text_on_screen, notify
 from itertools import izip
 from PIL import Image
 from subprocess import call
+from pytesseract import image_to_string
 from time import sleep
 
 path_to_images = "/home/beofen/FirstDraftGIS/firstdraftgis-chrome-extension-tester/images/"
+path_to_icon = path_to_images + "icon.png"
 
+# goes to blank page and clicks on it
+@notify
+def clear(context):
+    context.driver.get("about:blank")
+    sleep(1)
+    click((200,200))
+
+@given("cleared")
+@notify
+def cleared(context):
+    notify("starting cleared")
+    context.driver.get("about:blank")
+    sleep(1)
+    click((200,200))
+    click(path_to_icon)
+    click("delete")
+    sleep(1)
+    click("yes")
+ 
+@notify
 def getPercentDifference(a, b):
-    assert a.mode == a.mode
-    assert a.size == a.size
     pairs = izip(a.getdata(), b.getdata())
     dif = sum(abs(c1-c2) for p1,p2 in pairs for c1,c2 in zip(p1,p2))
     ncomponents = a.size[0] * a.size[1] * 3
     percentdiff = (dif / 255.0 * 100) / ncomponents 
-    print("erce:", percentdiff)
     return percentdiff
 
 @given("nothing")
+@notify
 def do_nothing(context):
     pass
 
@@ -24,15 +45,23 @@ def do_nothing(context):
 #def install_extension(context):
 
 @when("you click the button")
+@when("open popup")
+@notify
 def click_button(context):
-    call(["xdotool","mousemove","942","72","click","1"])
+    click(path_to_icon)
+    sleep(5)
 
 @when("wait three seconds")
+@notify
 def wait_three_seconds(context):
     sleep(3)
 
 @then("a popup should appear")
+@notify
 def popup_should_appear(context):
+    notify("starting popup_should_appear")
+    context.driver.get("about:blank")
+    sleep(1)
     print("starting popup_should_appear")
     call(["gnome-screenshot", "--file=/tmp/scrn.png"])
     sleep(3)
@@ -42,4 +71,17 @@ def popup_should_appear(context):
     comparison = Image.open(path_to_images + "opened.png")
     assert screenshot.mode == comparison.mode
     assert screenshot.size == comparison.size
-    assert getPercentDifference(screenshot,comparison) < 1
+    assert getPercentDifference(screenshot,comparison) < 5
+
+@notify
+@then("{name} should appear in popup")
+def name_should_appear_in_popup(context, name):
+    notify("starting name_should_appear_in_popup")
+    context.driver.get("about:blank")
+    sleep(1)
+    assert is_text_on_screen(name)
+
+@when("go to {url}")
+@notify
+def go_to_url(context, url):
+    context.driver.get(url)
