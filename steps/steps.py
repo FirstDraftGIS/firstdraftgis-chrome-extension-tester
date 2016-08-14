@@ -1,5 +1,5 @@
 from behave import *
-from breeze import click, is_text_on_screen, notify
+from beryl import click, is_text_on_screen, notify
 from itertools import izip
 from PIL import Image
 from subprocess import call
@@ -24,9 +24,9 @@ def cleared(context):
     sleep(1)
     click((200,200))
     click(path_to_icon)
-    click("delete")
+    click("Delete")
     sleep(1)
-    click("yes")
+    click("Yes")
  
 @notify
 def getPercentDifference(a, b):
@@ -51,10 +51,15 @@ def click_button(context):
     click(path_to_icon)
     sleep(5)
 
-@when("wait three seconds")
+@when(u'wait {number_of_seconds} seconds')
 @notify
-def wait_three_seconds(context):
-    sleep(3)
+def wait_number_of_seconds(context, number_of_seconds):
+    sleep(int(number_of_seconds))
+
+@when("wait 1 second")
+@notify
+def wait_1_second(context):
+    sleep(1)
 
 @then("a popup should appear")
 @notify

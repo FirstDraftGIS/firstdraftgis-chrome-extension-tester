@@ -2,10 +2,11 @@ Feature: capture place
 
     Scenario Outline: capture locations from pages
          When go to <url>
-          And wait three seconds
+          And wait 10 seconds
           And go to about:blank
+          And wait 1 second
           And open popup
-          And wait three seconds
+          And wait 1 second
          Then <name> should appear in popup
 
     Examples: Wikipedia Locations

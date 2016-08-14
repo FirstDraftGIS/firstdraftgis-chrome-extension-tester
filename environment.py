@@ -1,6 +1,6 @@
 #environment.py
 
-from breeze import click, notify
+from beryl import click, notify
 from os.path import abspath, dirname
 from PIL import Image
 from pyvirtualdisplay import Display
@@ -31,18 +31,18 @@ def after_scenario(context, scenario):
 
     # make sure popup is closed
     context.driver.get("about:blank") 
-    sleep(1)
+    sleep(0.5)
     click((200,200), notify=True)
-    sleep(1)
+    sleep(0.5)
 
     # click popup button
     click(path_to_icon, notify=True)
-    sleep(3)
+    sleep(2)
 
     # click delete button
-    click("delete", notify=True)
-    sleep(1)
-    click("yes", notify=True)
+    click("Delete", notify=True)
+    sleep(5)
+    click("Yes", notify=True)
 
     sleep(1)
     click((200,200), notify=True)
